@@ -55,4 +55,7 @@ jobs:
         run: bin/rubocop
 
       - name: Run tests
-        run: bin/rails db:setup && bin/rails db:migrate && bin/rails test
+        run: |
+          bin/rails db:setup
+          bin/rails db:migrate
+          bin/rails test
