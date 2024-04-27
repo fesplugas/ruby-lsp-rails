@@ -56,6 +56,6 @@ jobs:
 
       - name: Run tests
         run: |
-          bin/rails db:setup
-          bin/rails db:migrate
-          bin/rails test
+          ruby bin/rails db:setup
+          ruby bin/rails db:migrate
+          ruby bin/rails test
