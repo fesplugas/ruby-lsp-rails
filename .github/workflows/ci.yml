@@ -42,7 +42,7 @@ jobs:
           bundler: latest
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-          cache-version: 7
+          cache-version: 9
 
       - name: Check if documentation is up to date
         run: bundle exec rake ruby_lsp:check_docs

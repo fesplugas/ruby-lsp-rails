@@ -44,3 +44,4 @@ intended to be a safe, welcoming space for collaboration, and contributors are e
 
 The gem is available as open source under the terms of the
 [MIT License](https://github.com/Shopify/ruby-lsp-rails/blob/main/LICENSE.txt).
+x
