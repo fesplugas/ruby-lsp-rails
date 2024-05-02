@@ -9,6 +9,10 @@ class ServerTest < ActiveSupport::TestCase
     @server = RubyLsp::Rails::Server.new
   end
 
+  teardown do
+    @server.execute("shutdown", {})
+  end
+
   test "returns nil if model doesn't exist" do
     response = @server.execute("model", { name: "Foo" })
     assert_nil(response.fetch(:result))
