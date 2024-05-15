@@ -52,6 +52,8 @@ module RubyLsp
           VOID
         when "route_location"
           route_location(params.fetch(:name))
+        when "route_info"
+          resolve_route_info(params)
         else
           VOID
         end
@@ -60,6 +62,27 @@ module RubyLsp
       end
 
       private
+
+      def resolve_route_info(requirements)
+        if requirements[:controller]
+          requirements[:controller] = requirements.fetch(:controller).underscore.delete_suffix("_controller")
+        end
+        ## TODO: Upstream a better way to find route info from params.
+        route = ::Rails.application.routes.routes.find { |route| route.requirements == requirements }
+
+        if route&.source_location
+          file, _, line = route.source_location.rpartition(":")
+          body = {
+            source_location: [File.absolute_path(file), line],
+            verb: route.verb,
+            path: route.path.spec.to_s,
+          }
+
+          { result: body }
+        else
+          { result: nil }
+        end
+      end
 
       # Older versions of Rails don't support `route_source_locations`.
       # We also check that it's enabled.
