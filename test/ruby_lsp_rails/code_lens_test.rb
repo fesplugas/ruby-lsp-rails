@@ -273,10 +273,25 @@ module RubyLsp
         assert_equal("ruby bin/rails test /fake.rb", response[0].command.arguments[2])
       end
 
+      test "recognizes controller actions" do
+        response = generate_code_lens_for_source(<<~RUBY)
+          class UsersController < ApplicationController
+            def index
+            end
+          end
+        RUBY
+
+        assert_equal(1, response.size)
+        assert_match("GET /users(.:format)", response[0].command.title)
+        # assert_equal(["#{@client.root}/config/routes.rb", 3], response[0].command.arguments[0])
+      end
+
       private
 
       def generate_code_lens_for_source(source)
         with_server(source) do |server, uri|
+          sleep(0.1) while RubyLsp::Addon.addons.first.instance_variable_get(:@client).is_a?(NullClient)
+
           server.process_message(
             id: 1,
             method: "textDocument/codeLens",
