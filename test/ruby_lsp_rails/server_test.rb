@@ -98,6 +98,16 @@ class ServerTest < ActiveSupport::TestCase
     assert(response.dig(:result, :error))
   end
 
+  test "resolve association handles class_name option" do
+    options = { class_name: "Country" }
+    response = @server.execute(
+      "association_target_location",
+      { model_name: "User", association_name: :location, association_type: :belongs_to, options: options },
+    )
+    location = response[:result][:location]
+    assert_match %r{test/dummy/app/models/country.rb:3$}, location
+  end
+
   test "route location returns the location for a valid route" do
     response = @server.execute("route_location", { name: "user_path" })
     location = response[:result][:location]
