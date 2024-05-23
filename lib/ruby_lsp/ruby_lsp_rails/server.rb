@@ -67,8 +67,13 @@ module RubyLsp
         if requirements[:controller]
           requirements[:controller] = requirements.fetch(:controller).underscore.delete_suffix("_controller")
         end
-        ## TODO: Upstream a better way to find route info from params.
-        route = ::Rails.application.routes.routes.find { |route| route.requirements == requirements }
+
+        # `from_requirements` is supported since Rails 7.2, otherwise we fallback to a private API.
+        route = if ::Rails.application.routes.respond_to?(:from_requirements)
+          ::Rails.application.routes.from_requirements(requirements)
+        else
+          ::Rails.application.routes.routes.find { |route| route.requirements == requirements }
+        end
 
         if route&.source_location
           file, _, line = route.source_location.rpartition(":")
