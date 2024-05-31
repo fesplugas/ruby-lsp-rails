@@ -915,7 +915,7 @@ class RubyIndexer::PrefixTree::Node
   def value=(_arg0); end
 end
 
-# source://ruby-lsp/lib/ruby-lsp.rb#4
+# source://ruby-lsp-rails/0.3.6lib/ruby_lsp_rails/railtie.rb#6
 module RubyLsp; end
 
 # To register an addon, inherit from this class and implement both `name` and `activate`

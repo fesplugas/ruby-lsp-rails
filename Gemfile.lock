@@ -7,6 +7,14 @@ GIT
       psych (>= 4.0.0)
 
 PATH
+  remote: ../ruby-lsp
+  specs:
+    ruby-lsp (0.17.1)
+      language_server-protocol (~> 3.17.0)
+      prism (>= 0.29.0, < 0.30)
+      sorbet-runtime (>= 0.5.10782)
+
+PATH
   remote: .
   specs:
     ruby-lsp-rails (0.3.6)
@@ -229,10 +237,6 @@ GEM
       rubocop (~> 1.51)
     rubocop-sorbet (0.8.3)
       rubocop (>= 0.90.0)
-    ruby-lsp (0.17.0)
-      language_server-protocol (~> 3.17.0)
-      prism (>= 0.29.0, < 0.30)
-      sorbet-runtime (>= 0.5.10782)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     sorbet (0.5.11391)
@@ -297,6 +301,7 @@ DEPENDENCIES
   rubocop-rake (~> 0.6.0)
   rubocop-shopify (~> 2.15)
   rubocop-sorbet (~> 0.8)
+  ruby-lsp!
   ruby-lsp-rails!
   sorbet-static-and-runtime
   sqlite3 (< 2)
