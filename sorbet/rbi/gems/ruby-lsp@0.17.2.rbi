@@ -1242,7 +1242,7 @@ class RubyLsp::Document
   sig { params(edits: T::Array[T::Hash[::Symbol, T.untyped]], version: ::Integer).void }
   def push_edits(edits, version:); end
 
-  # source://ruby-lsp/lib/ruby_lsp/document.rb#177
+  # source://ruby-lsp/lib/ruby_lsp/document.rb#182
   sig { returns(T::Boolean) }
   def sorbet_sigil_is_true_or_higher; end
 
@@ -1267,32 +1267,32 @@ class RubyLsp::Document
   def version; end
 end
 
-# source://ruby-lsp/lib/ruby_lsp/document.rb#183
+# source://ruby-lsp/lib/ruby_lsp/document.rb#188
 class RubyLsp::Document::Scanner
-  # source://ruby-lsp/lib/ruby_lsp/document.rb#191
+  # source://ruby-lsp/lib/ruby_lsp/document.rb#196
   sig { params(source: ::String, encoding: ::Encoding).void }
   def initialize(source, encoding); end
 
   # Finds the character index inside the source string for a given line and column
   #
-  # source://ruby-lsp/lib/ruby_lsp/document.rb#200
+  # source://ruby-lsp/lib/ruby_lsp/document.rb#205
   sig { params(position: T::Hash[::Symbol, T.untyped]).returns(::Integer) }
   def find_char_position(position); end
 
   # Subtract 1 for each character after 0xFFFF in the current line from the column position, so that we hit the
   # right character in the UTF-8 representation
   #
-  # source://ruby-lsp/lib/ruby_lsp/document.rb#222
+  # source://ruby-lsp/lib/ruby_lsp/document.rb#227
   sig { params(current_position: ::Integer, requested_position: ::Integer).returns(::Integer) }
   def utf_16_character_position_correction(current_position, requested_position); end
 end
 
-# source://ruby-lsp/lib/ruby_lsp/document.rb#186
+# source://ruby-lsp/lib/ruby_lsp/document.rb#191
 RubyLsp::Document::Scanner::LINE_BREAK = T.let(T.unsafe(nil), Integer)
 
 # After character 0xFFFF, UTF-16 considers characters to have length 2 and we have to account for that
 #
-# source://ruby-lsp/lib/ruby_lsp/document.rb#188
+# source://ruby-lsp/lib/ruby_lsp/document.rb#193
 RubyLsp::Document::Scanner::SURROGATE_PAIR_START = T.let(T.unsafe(nil), Integer)
 
 # source://ruby-lsp/lib/ruby_lsp/utils.rb#90
@@ -2594,16 +2594,27 @@ class RubyLsp::Message
   def to_hash; end
 end
 
-# This class allows listeners to access contextual information about a node in the AST, such as its parent
-# and its namespace nesting.
+# This class allows listeners to access contextual information about a node in the AST, such as its parent,
+# its namespace nesting, and the surrounding CallNode (e.g. a method call).
 #
 # source://ruby-lsp/lib/ruby_lsp/node_context.rb#7
 class RubyLsp::NodeContext
-  # source://ruby-lsp/lib/ruby_lsp/node_context.rb#17
-  sig { params(node: T.nilable(::Prism::Node), parent: T.nilable(::Prism::Node), nesting: T::Array[::String]).void }
-  def initialize(node, parent, nesting); end
+  # source://ruby-lsp/lib/ruby_lsp/node_context.rb#27
+  sig do
+    params(
+      node: T.nilable(::Prism::Node),
+      parent: T.nilable(::Prism::Node),
+      nesting: T::Array[::String],
+      call_node: T.nilable(::Prism::CallNode)
+    ).void
+  end
+  def initialize(node, parent, nesting, call_node); end
 
-  # source://ruby-lsp/lib/ruby_lsp/node_context.rb#24
+  # source://ruby-lsp/lib/ruby_lsp/node_context.rb#17
+  sig { returns(T.nilable(::Prism::CallNode)) }
+  def call_node; end
+
+  # source://ruby-lsp/lib/ruby_lsp/node_context.rb#35
   sig { returns(::String) }
   def fully_qualified_name; end
 
@@ -2984,7 +2995,7 @@ class RubyLsp::Requests::Definition < ::RubyLsp::Requests::Request
   end
   def initialize(document, global_state, position, dispatcher, typechecker_enabled); end
 
-  # source://ruby-lsp/lib/ruby_lsp/requests/definition.rb#103
+  # source://ruby-lsp/lib/ruby_lsp/requests/definition.rb#106
   sig { override.returns(T::Array[::LanguageServer::Protocol::Interface::Location]) }
   def perform; end
 end
