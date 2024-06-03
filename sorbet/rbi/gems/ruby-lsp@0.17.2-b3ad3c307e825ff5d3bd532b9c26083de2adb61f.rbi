@@ -915,7 +915,7 @@ class RubyIndexer::PrefixTree::Node
   def value=(_arg0); end
 end
 
-# source://ruby-lsp-rails/0.3.6lib/ruby_lsp_rails/railtie.rb#6
+# source://ruby-lsp/lib/ruby-lsp.rb#4
 module RubyLsp; end
 
 # To register an addon, inherit from this class and implement both `name` and `activate`
@@ -2995,7 +2995,7 @@ class RubyLsp::Requests::Definition < ::RubyLsp::Requests::Request
   end
   def initialize(document, global_state, position, dispatcher, typechecker_enabled); end
 
-  # source://ruby-lsp/lib/ruby_lsp/requests/definition.rb#106
+  # source://ruby-lsp/lib/ruby_lsp/requests/definition.rb#105
   sig { override.returns(T::Array[::LanguageServer::Protocol::Interface::Location]) }
   def perform; end
 end

@@ -6,8 +6,10 @@ GIT
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
 
-PATH
-  remote: ../ruby-lsp
+GIT
+  remote: https://github.com/Shopify/ruby-lsp.git
+  revision: b3ad3c307e825ff5d3bd532b9c26083de2adb61f
+  branch: andyw8/add-callnode-to-node-context
   specs:
     ruby-lsp (0.17.2)
       language_server-protocol (~> 3.17.0)
