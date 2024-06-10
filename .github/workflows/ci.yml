@@ -22,6 +22,14 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
     continue-on-error: ${{ !!matrix.experimental }}
     name: Ruby ${{ matrix.ruby }} on ${{ matrix.os }} with ${{matrix.gemfile}}
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - uses: actions/checkout@v3
 
@@ -38,7 +46,10 @@ jobs:
           cache-version: 7
 
       - name: Run tests
-        run: bundle exec rake
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: mysql2://127.0.0.1:3306
+        run: bin/rails db:setup && bundle exec rake
   lint:
     runs-on: ubuntu-latest
     steps:

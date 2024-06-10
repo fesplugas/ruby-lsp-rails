@@ -4,6 +4,9 @@ type: ruby
 
 up:
   - ruby
+  - packages:
+    - mysql_client
+  - mysql
   - bundler:
       gemfile: Gemfile
 
