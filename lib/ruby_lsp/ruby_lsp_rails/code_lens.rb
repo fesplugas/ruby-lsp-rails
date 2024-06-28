@@ -68,13 +68,15 @@ module RubyLsp
       sig do
         params(
           client: RunnerClient,
+          global_state: GlobalState,
           response_builder:  ResponseBuilders::CollectionResponseBuilder[Interface::CodeLens],
           uri: URI::Generic,
           dispatcher: Prism::Dispatcher,
         ).void
       end
-      def initialize(client, response_builder, uri, dispatcher)
+      def initialize(client, global_state, response_builder, uri, dispatcher)
         @client = client
+        @global_state = global_state
         @response_builder = response_builder
         @path = T.let(uri.to_standardized_path, T.nilable(String))
         @group_id = T.let(1, Integer)
@@ -134,6 +136,18 @@ module RubyLsp
 
       sig { params(node: Prism::ClassNode).void }
       def add_route_code_lenses_to_actions(node)
+        controller = @global_state.index[node.name.to_s].first
+        action_names = @global_state
+          .index
+          .instance_variable_get(:@entries) # hacky, we would introduce some method for this
+          .values
+          .flatten
+          .grep(RubyIndexer::Entry::InstanceMethod)
+          .select { _1.owner == controller && _1.visibility == RubyIndexer::Entry::Visibility::PUBLIC }
+          .map(&:name)
+
+        # would still need a few more changes
+
         public_method_nodes = T.must(node.body).child_nodes.take_while do |node|
           !node.is_a?(Prism::CallNode) || ![:protected, :private].include?(node.name)
         end
