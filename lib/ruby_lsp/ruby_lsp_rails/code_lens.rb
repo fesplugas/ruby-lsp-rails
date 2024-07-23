@@ -168,11 +168,6 @@ module RubyLsp
       end
 
       sig { params(node: Prism::ModuleNode).void }
-      def on_module_node_enter(node)
-        @constant_name_stack << [node.constant_path.slice, nil]
-      end
-
-      sig { params(node: Prism::ModuleNode).void }
       def on_module_node_leave(node)
         @constant_name_stack.pop
       end
